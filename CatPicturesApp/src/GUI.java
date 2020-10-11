@@ -1,5 +1,10 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -9,8 +14,11 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 
+@SuppressWarnings("serial")
 public class GUI extends JFrame implements ActionListener{
 	
+	
+	// login window element declaration
 	JPanel loginPanel = new JPanel();
 	private static JLabel usernameLabel;
 	private static JTextField usernameTextField;
@@ -20,11 +28,41 @@ public class GUI extends JFrame implements ActionListener{
 	private static JButton openRegistrationWindow;
 	private static JLabel loginStatusLabel;
 	
-	
+	//login window 
 	public GUI () {
 		super("Login");
 		setSize(300, 200);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		
+		try {
+			
+			File usernames = new File("C:\\Users\\220037\\git\\CatPicturesApp\\CatPicturesApp\\usernames.txt");
+			File passwords = new File("C:\\Users\\220037\\git\\CatPicturesApp\\CatPicturesApp\\passwords.txt");
+			
+			// create username file
+			if (usernames.createNewFile()) {
+				System.out.println("File Created: " + usernames.getName());
+				
+			}else {
+				System.out.println("Username File Already Created");
+			}
+			
+			// create password file
+			if (passwords.createNewFile()) {
+				System.out.println("File Created: " + passwords.getName());
+		
+			}else {
+				System.out.println("Password File Already Created");
+			}
+			
+			
+		}catch (IOException e) {
+			System.out.println("An Error Occurred...");
+			e.printStackTrace();
+		}
+		
+		
 		loginPanel.setLayout(null);
 		add(loginPanel);
 		
@@ -48,14 +86,42 @@ public class GUI extends JFrame implements ActionListener{
 		loginButton.setBounds(10, 100, 80, 25);
 		loginButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				if (usernameTextField.getText().equals("Nathan") && passwordTextField.getText().equals("qwerty123")) {
+				loginStatusLabel.setText("");
+				BufferedReader usernameReader;
+				BufferedReader passwordReader;
+				try{	
+					usernameReader = new BufferedReader(new FileReader(
+							"C:\\Users\\220037\\git\\CatPicturesApp\\CatPicturesApp\\usernames.txt"));
+					passwordReader = new BufferedReader(new FileReader(
+							"C:\\Users\\220037\\git\\CatPicturesApp\\CatPicturesApp\\passwords.txt"));
 					
-					loginStatusLabel.setText("Login Successful");
-					createApplicationWindow();
-					dispose();
+					String usernameLine = usernameReader.readLine();
+					String passwordLine = passwordReader.readLine();
+					boolean usernameExists = false;
+					boolean passwordExists = false;
+					while(usernameLine != null) {
+						if (usernameTextField.getText() == usernameLine) {
+							usernameExists = true;
+						}else {
+							usernameLine = usernameReader.readLine();
+						}
+					}
+					while (passwordLine != null) {
+						if (passwordTextField.getText() == passwordLine) {
+							passwordExists = true;
+						}else {
+							passwordLine = passwordReader.readLine();						}
+					}
+					if (usernameExists && passwordExists) {
+						loginStatusLabel.setText("Login Successful");
+						createApplicationWindow();
+						dispose();
+					}else {
+						loginStatusLabel.setText("Login Failed, Try Again or Register an Account");
+					}
+				}catch (IOException e1) {
+					e1.printStackTrace();
 				}
-				
 			}
 		});
 		loginPanel.add(loginButton);
@@ -71,7 +137,7 @@ public class GUI extends JFrame implements ActionListener{
 		loginPanel.add(openRegistrationWindow);
 		
 		loginStatusLabel = new JLabel("");
-		loginStatusLabel.setBounds(10, 120, 100, 25);
+		loginStatusLabel.setBounds(10, 120, 300, 25);
 		loginPanel.add(loginStatusLabel);
 		setVisible(true);
 	}
@@ -106,7 +172,7 @@ public class GUI extends JFrame implements ActionListener{
 		JFrame registrationWindow = new JFrame();
 		registrationWindow.setTitle("Register an Account");
 		registrationWindow.setSize(300, 200);
-		registrationWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		registrationWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		
 		
