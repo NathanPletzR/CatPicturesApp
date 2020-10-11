@@ -1,3 +1,4 @@
+import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -7,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -33,6 +35,7 @@ public class GUI extends JFrame implements ActionListener{
 		super("Login");
 		setSize(300, 200);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(false);
 		
 		
 		try {
@@ -169,12 +172,65 @@ public class GUI extends JFrame implements ActionListener{
 	
 	public void createRegistrationWindow() {
 		
-		JFrame registrationWindow = new JFrame();
+		JDialog registrationWindow = new JDialog();
+		JPanel registrationWindowPanel = new JPanel();
+		JLabel newUsernameLabel;
+		JTextField newUsernameTextField;
+		JLabel newPasswordLabelOne;
+		JPasswordField newPasswordTextFieldOne;
+		JLabel newPasswordLabelTwo;
+		JPasswordField newPasswordTextFieldTwo;
+		JButton registerNewAccount;
+		JLabel registrationStatusLabel;
+		
+		
 		registrationWindow.setTitle("Register an Account");
-		registrationWindow.setSize(300, 200);
+		registrationWindow.setSize(400, 250);
 		registrationWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		registrationWindow.setResizable(false);
+		registrationWindow.setModal(true);
+		registrationWindow.setAlwaysOnTop(true);
+		registrationWindow.setModalityType(ModalityType.APPLICATION_MODAL);
 		
+		registrationWindowPanel.setLayout(null);
+		registrationWindow.add(registrationWindowPanel);
 		
+		newUsernameLabel = new JLabel("Enter Username:");
+		newUsernameLabel.setBounds(10, 10, 120, 25);
+		registrationWindowPanel.add(newUsernameLabel);
+		
+		newUsernameTextField = new JTextField(20);
+		newUsernameTextField.setBounds(170, 10, 165, 25);
+		registrationWindowPanel.add(newUsernameTextField);
+		
+		newPasswordLabelOne = new JLabel("Enter Password:");
+		newPasswordLabelOne.setBounds(10, 45, 120, 25);
+		registrationWindowPanel.add(newPasswordLabelOne);
+		
+		newPasswordTextFieldOne = new JPasswordField();
+		newPasswordTextFieldOne.setBounds(170, 45, 165, 25);
+		registrationWindowPanel.add(newPasswordTextFieldOne);
+		
+		newPasswordLabelTwo = new JLabel("Enter Password Again:");
+		newPasswordLabelTwo.setBounds(10, 80, 150, 25);
+		registrationWindowPanel.add(newPasswordLabelTwo);
+		
+		newPasswordTextFieldTwo = new JPasswordField();
+		newPasswordTextFieldTwo.setBounds(170, 80, 165, 25);
+		registrationWindowPanel.add(newPasswordTextFieldTwo);
+		
+		registerNewAccount = new JButton("Register Account");
+		registerNewAccount.setBounds(10, 130, 150, 25);
+		registerNewAccount.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		registrationWindowPanel.add(registerNewAccount);
+		
+		registrationStatusLabel = new JLabel("");
+		registrationStatusLabel.setBounds(10, 170, 300, 25);
+		registrationWindowPanel.add(registrationStatusLabel);
 		
 		registrationWindow.setVisible(true);
 	}
